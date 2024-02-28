@@ -28,7 +28,7 @@ if($work_week && $work_day && $work_job && $work_staff){
                         week_id = '$work_week', 
                         day_id = '$work_day', 
                         job_id = '$work_job', 
-                        location_id = (SELECT * FROM job j WHERE j.id = '$work_job'),
+                        location_id = (SELECT j.location_id FROM job j WHERE j.id = '$work_job'),
                         staff_id = '$work_staff'
                     WHERE 
                         id = '$appointment_id'
