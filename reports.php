@@ -19,7 +19,7 @@ include_once("includes/utils.php");
 <p>
     This table displays the quantity (up to 3) jobs that require elevated access that users with
     elevated access have completed and is supposed outline the people who are not using their
-    high clearance so then it can be reduced later to enhance security
+    high clearance so then it can be reduced later to enhance security.
 </p>
 
 <?php
@@ -64,18 +64,18 @@ $run = runAndCheckSQL($connect, $sql);
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <?php
-            while ($row = mysqli_fetch_assoc($run))
-            {
-                echo '<td>', $row['staff_id'],'</td>';
-                echo '<td>', $row['first_name'],'</td>';
-                echo '<td>', $row['last_name'],'</td>';
-                echo '<td>', $row['clearance_level'],'</td>';
-                echo '<td>', $row['high_access_job_count'],'</td>';
-            };
-            ?>
-        </tr>
+        <?php
+        while ($row = mysqli_fetch_assoc($run))
+        {
+            echo '<tr>';
+            echo '<td>', $row['staff_id'],'</td>';
+            echo '<td>', $row['first_name'],'</td>';
+            echo '<td>', $row['last_name'],'</td>';
+            echo '<td>', $row['clearance_level'],'</td>';
+            echo '<td>', $row['high_access_job_count'],'</td>';
+            echo '<tr>';
+        };
+        ?>
     </tbody>
 </table>
 
@@ -83,6 +83,13 @@ $run = runAndCheckSQL($connect, $sql);
 <!-- Percentage of Total Jobs per Area Pie Chart -->
 <!-- ====================================================== -->
 <h3 class="mx-md mt-5">Percentage of Total Jobs per Area</h3>
+
+<p>
+    This is a pie chart which displays a percentage of total jobs per area 
+    which is meant to show what area is having the most work done in.
+</p>
+
+
 
 <?php
 
