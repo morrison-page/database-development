@@ -154,6 +154,11 @@ $data_json = json_encode($data);
 <!-- ====================================================== -->
 <h3 class="mx-md mt-5">Quantity of Each Job Type Carried Out</h3>
 
+<p>
+    This is a bar chart visualisation on the quantity of jobs which are planned
+    or completed seperated into job type to identify the most frequent jobs.
+</p>
+
 <?php
 $sql = "SELECT
     j.name AS job_name,
