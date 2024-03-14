@@ -85,22 +85,133 @@ $run = runAndCheckSQL($connect, $sql);
 <h3 class="mx-md mt-5">Percentage of Total Jobs per Area</h3>
 
 <p>
-    This is a pie chart which displays a percentage of total jobs per area 
+    This is a pie chart which displays total jobs per area 
     which is meant to show what area is having the most work done in.
 </p>
 
-
-
 <?php
+$sql = "SELECT
+    l.name,
+    COUNT(ws.id) AS jobs_per_area
+FROM
+    work_schedule ws
+LEFT JOIN location l ON
+    l.id = ws.location_id
+GROUP BY
+    location_id;";
 
+$run = runAndCheckSQL($connect, $sql);
+
+$results = [];
+while ($row = mysqli_fetch_assoc($run)) {
+    $results[] = $row;
+}
+
+$labels = [];
+$data = [];
+foreach ($results as $row) {
+    $labels[] = $row['name'];
+    $data[] = $row['jobs_per_area'];
+}
+
+$labels_json = json_encode($labels);
+$data_json = json_encode($data);
 ?>
+
+<canvas id="pieChart"></canvas>
+    <script>
+        var labels = <?php echo $labels_json; ?>;
+        var data = <?php echo $data_json; ?>;
+        
+        var ctx = document.getElementById('pieChart').getContext('2d');
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Jobs per Area',
+                    data: data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
 
 <!-- ====================================================== -->
 <!-- Quantity of Each Job Type Carried Out Bar Chart -->
 <!-- ====================================================== -->
 <h3 class="mx-md mt-5">Quantity of Each Job Type Carried Out</h3>
 
+<?php
+$sql = "SELECT
+    j.name AS job_name,
+    COUNT(ws.job_id) AS jobs_count
+FROM
+    job j
+LEFT JOIN work_schedule ws ON
+    j.id = ws.job_id
+GROUP BY
+    j.name;";
 
+$run = runAndCheckSQL($connect, $sql);
+
+$results = [];
+while ($row = mysqli_fetch_assoc($run)) {
+    $results[] = $row;
+}
+
+$labels = [];
+$data = [];
+foreach ($results as $row) {
+    $labels[] = $row['job_name'];
+    $data[] = $row['jobs_count'];
+}
+
+$labels_json = json_encode($labels);
+$data_json = json_encode($data);
+?>
+
+<canvas id="barChart" width="400" height="400"></canvas>
+    <script>
+        // Retrieve data from PHP variables
+        var labels = <?php echo $labels_json; ?>;
+        var data = <?php echo $data_json; ?>;
+        
+        // Create bar chart
+        var ctx = document.getElementById('barChart').getContext('2d');
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Jobs Count',
+                    data: data,
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 
 <!-- ====================================================== -->
 <!-- PAGE CONTENT ENDS HERE -->
