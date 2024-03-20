@@ -42,8 +42,6 @@ $staff_id = (isset($_POST["staff_id"])) ? mysqli_real_escape_string($connect, $_
                 FROM
                     staff s
                 JOIN
-                    work_schedule ws ON s.id = ws.staff_id
-                JOIN
                     job j ON ws.job_id = j.id 
                 $staff_check
                 GROUP BY 
